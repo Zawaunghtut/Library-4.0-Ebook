@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library 4.0 - ဇော်အောင်ထွတ် (စာကြည့်တိုက်ပညာ)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pyidaungsu&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #2C3E50;
+            --secondary: #E74C3C;
+            --accent: #3498DB;
+            --light: #ECF0F1;
+            --dark: #1A252F;
+            --sidebar: #2C3E50;
+            --sidebar-hover: #34495E;
+            --gradient-1: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            --gradient-2: linear-gradient(to right, #3498DB, #2C3E50);
+            --shadow: 0 8px 30px rgba(0,0,0,0.08);
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Pyidaungsu', sans-serif;
+            background-color: #f9fafc;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            color: #2d3436;
+            overflow: hidden;
+            line-height: 1.7;
+        }
+
+        /* Sidebar - Modern Design */
+        .sidebar {
+            width: 320px;
+            background: var(--sidebar);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+            z-index: 10;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .sidebar-header {
+            padding: 30px 25px;
+            background: var(--dark);
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-header h3 {
+            margin: 0;
+            font-size: 1.4rem;
+            color: white;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sidebar-header .subtitle {
+            font-size: 0.85rem;
+            color: #BDC3C7;
+            margin-top: 5px;
+        }
+
+        .menu {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+
+        .menu-item {
+            padding: 16px 25px;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-item:hover {
+            background: var(--sidebar-hover);
+            padding-left: 30px;
+        }
+
+        .menu-item.active {
+            background: rgba(231, 76, 60, 0.15);
+            border-left: 4px solid var(--secondary);
+            color: white;
+        }
+
+        .menu-item i {
+            margin-right: 15px;
+            font-size: 1.1rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .menu-item .chapter-number {
+            background: rgba(255,255,255,0.1);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin-left: auto;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            background: white;
+            position: relative;
+        }
+
+        .content-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 50px;
+        }
+
+        .page {
+            display: none;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Header with gradient */
+        .page-header {
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            position: relative;
+        }
+
+        .page-header h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+
+        .page-header h1:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: var(--secondary);
+            border-radius: 2px;
+        }
+
+        .page-header h2 {
+            color: var(--primary);
+            margin-top: 30px;
+            padding-left: 20px;
+            border-left: 5px solid var(--accent);
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .page-header h3 {
+            color: #555;
+            font-size: 1.4rem;
+            font-weight: 500;
+            margin-top: 25px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #ddd;
+        }
+
+        /* Content styling */
+        .content {
+            line-height: 1.8;
+            text-align: justify;
+            font-size: 1.05rem;
+        }
+
+        p {
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, rgba(255, 243, 205, 0.7) 0%, rgba(255, 243, 205, 0.3) 100%);
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-weight: 500;
+            border-left: 3px solid #FFC107;
+        }
+
+        .quote {
+            background: #F8F9FA;
+            border-left: 5px solid var(--accent);
+            padding: 25px;
+            margin: 30px 0;
+            font-style: italic;
+            border-radius: 0 var(--radius) var(--radius) 0;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .quote:before {
+            content: '"';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 3rem;
+            color: rgba(52, 152, 219, 0.2);
+            font-family: serif;
+        }
+
+        /* Lists */
+        ul, ol {
+            padding-left: 30px;
+            margin-bottom: 25px;
+        }
+
+        ul li, ol li {
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        ul li:before {
+            content: '•';
+            color: var(--secondary);
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+
+        /* Footer */
+        .footer-note {
+            margin-top: 60px;
+            padding-top: 25px;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            border-top: 1px solid #eee;
+            text-align: center;
+        }
+
+        .book-info {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        /* Animation */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Decorative elements */
+        .decoration {
+            position: absolute;
+            z-index: -1;
+            opacity: 0.03;
+        }
+
+        .decoration-1 {
+            top: 10%;
+            right: 5%;
+            font-size: 12rem;
+            color: var(--primary);
+        }
+
+        .decoration-2 {
+            bottom: 10%;
+            left: 5%;
+            font-size: 8rem;
+            color: var(--secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 280px;
+            }
+            
+            .content-wrapper {
+                padding: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                max-height: 70vh;
+            }
+            
+            .main-content {
+                height: 100%;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .sidebar { display: none; }
+            .main-content { width: 100%; padding: 0; }
+            .content-wrapper { max-width: 100%; padding: 20px; }
+            .page { display: block !important; page-break-after: always; }
+            .decoration { display: none; }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #bdc3c7;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #95a5a6;
+        }
+
+        /* Progress bar */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 320px;
+            right: 0;
+            height: 4px;
+            background: #eee;
+            z-index: 100;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--gradient-2);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        /* Toolbar */
+        .toolbar {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 10px;
+            z-index: 50;
+        }
+
+        .toolbar-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .toolbar-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .toolbar-btn.print {
+            background: var(--secondary);
+        }
+
+        .toolbar-btn.theme {
+            background: var(--accent);
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="sidebar-header">
+        <h3>Library 4.0 E-Reader</h3>
+        <div class="subtitle">© 2026 Zaw Aung Htut</div>
+    </div>
+    <div class="menu">
+        <div class="menu-item active" onclick="showPage('intro')">
+            <i class="fas fa-home"></i>နိဒါန်း
+        </div>
+        <div class="menu-item" onclick="showPage('ch1')">
+            <i class="fas fa-book-open"></i>အခန်း (၁) မြန်မာ့စာကြည့်တိုက်သမိုင်း
+            <span class="chapter-number">၁</span>
+        </div>
+        <div class="menu-item" onclick="showPage('ch2')">
+            <i class="fas fa-laptop-code"></i>အခန်း (၂) Library 4.0 ဆိုတာဘာလဲ
+            <span class="chapter-number">၂</span>
+        </div>
+        <div class="menu-item" onclick="showPage('ch3')">
+            <i class="fas fa-cogs"></i>အခန်း (၃) နည်းပညာနှင့် အဆင့်မြှင့်တင်ခြင်း
+            <span class="chapter-number">၃</span>
+        </div>
+        <div class="menu-item" onclick="showPage('ch4')">
+            <i class="fas fa-users"></i>အခန်း (၄) စာကြည့်တိုက်မှူးများ၏ ကဏ္ဍ
+            <span class="chapter-number">၄</span>
+        </div>
+        <div class="menu-item" onclick="showPage('conclusion')">
+            <i class="fas fa-flag-checkered"></i>နိဂုံး
+        </div>
+        <div class="menu-item" onclick="showPage('biblio')">
+            <i class="fas fa-book"></i>ကျမ်းကိုးစာရင်း
+        </div>
+        <div class="menu-item" onclick="showPage('author')">
+            <i class="fas fa-user"></i>စာရေးသူ၏ ကိုယ်ရေးရာဇဝင်
+        </div>
+    </div>
+</div>
+
+<div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+</div>
+
+<div class="main-content">
+    <div class="content-wrapper">
+        <div id="intro" class="page active">
+            <div class="page-header">
+                <h1>နိဒါန်း</h1>
+                <h3>အတိတ်၏ အမြုတေ၊ အနာဂတ်၏ မျှော်လင့်ချက်</h3>
+            </div>
+            <div class="content">
+                <div class="quote">
+                    "အတိတ်၏ သင်ခန်းစာကိုယူ၍ ပစ္စုပ္ပန်ကာလတွင် အနာဂတ်ကို တည်ဆောက်ကြရမည်"
+                </div>
+                <p>ဤစကားရပ်သည် ကျွန်ုပ်တို့ စာကြည့်တိုက်ပညာရှင်များအတွက် အလွန်အရေးကြီးသော လမ်းညွှန်ချက်ဖြစ်သည်။ မြန်မာ့ယဉ်ကျေးမှု သမိုင်းတစ်လျှောက်တွင် စာပေအသိပညာကို ထိန်းသိမ်းစောင့်ရှောက်ခြင်းသည် အမျိုးသားရေး တာဝန်တစ်ရပ်ကဲ့သို့ တည်ရှိခဲ့သည်။</p>
+                <p>ယနေ့ ၂၁ ရာစု၏ စတုတ္ထမြောက် စက်မှုတော်လှန်ရေး (Industry 4.0) ကာလတွင် နည်းပညာများသည် အရှိန်အဟုန်ဖြင့် ပြောင်းလဲနေသည်။ ဤအပြောင်းအလဲသည် စာကြည့်တိုက်ကဏ္ဍကိုလည်း ရိုက်ခတ်လျက်ရှိရာ <span class="highlight">"Library 4.0"</span> ဆိုသော အယူအဆမှာ ရွေးချယ်စရာမဟုတ်ဘဲ မဖြစ်မနေ လျှောက်လှမ်းရမည့် လမ်းစဉ်ဖြစ်လာသည်။</p>
+                <p>ဤစာအုပ်သည် ကျွန်ုပ်၏ နှစ်ပေါင်းများစွာ စာကြည့်တိုက်ပညာ အတွေ့အကြုံများ၊ Excel Programming, HTML, CSS, JavaScript, Python ကျွမ်းကျင်မှုများနှင့် ခေတ်သစ် AI နည်းပညာတို့ကို ပေါင်းစပ်ထားခြင်းဖြစ်သည်။</p>
+            </div>
+            <div class="decoration decoration-1">
+                <i class="fas fa-book"></i>
+            </div>
+        </div>
+
+        <div id="ch1" class="page">
+            <div class="page-header">
+                <h1>အခန်း (၁)</h1>
+                <h2>မြန်မာ့စာကြည့်တိုက်သမိုင်း (ပုဂံခေတ်မှသည် ဒီဂျစ်တယ်ခေတ်ဆီသို့)</h2>
+            </div>
+            <div class="content">
+                <h3>၁.၁ ပုဂံခေတ်၏ အသိပညာဗဟိုချက်</h3>
+                <p>မြန်မာ့စာကြည့်တိုက်သမိုင်း၏ အစဦးကို ရှာဖွေလျှင် ပုဂံခေတ်သို့ ဦးတည်ရမည်ဖြစ်သည်။ အနော်ရထာမင်းစောသည် သထုံပြည်မှ ပိဋကတ်တော် အစုံ ၃၀ ကို ဆင်ဖြူတော် ၃၂ စီးဖြင့် ပုဂံသို့ ပင့်ဆောင်လာခဲ့ရာမှ မြန်မာ့ပထမဆုံးသော စနစ်ကျသည့် စာကြည့်တိုက်ဖြစ်သည့် "ပုဂံပိဋကတ်တိုက်တော်" ပေါ်ပေါက်လာခဲ့သည်။</p>
+                
+                <h3>၁.၂ မြကန်စက္ကူတိုက်နှင့် ရှေးဟောင်းစာမူများ</h3>
+                <p>ပုဂံခေတ်တွင် ပိဋကတ်တိုက်များအပြင် "မြကန်စက္ကူတိုက်" ကဲ့သို့သော အဖွဲ့အစည်းဆိုင်ရာ စာကြည့်တိုက်များလည်း ရှိခဲ့သည်။ ဤအစဉ်အလာသည် ကုန်းဘောင်ခေတ်အထိတိုင်အောင် နန်းတွင်းစာကြည့်တိုက်များအဖြစ် ခိုင်မာစွာ တည်ရှိခဲ့သည်။</p>
+                
+                <h3>၁.၃ ကိုလိုနီခေတ်နှင့် အပြောင်းအလဲ</h3>
+                <p>ကိုလိုနီခေတ်သို့ ရောက်သောအခါ အနောက်တိုင်း၏ စာကြည့်တိုက် စီမံခန့်ခွဲမှုစနစ်များ စတင်ဝင်ရောက်လာခဲ့သည်။ ဘားနတ်စာကြည့်တိုက် (Bernard Free Library) ပေါ်ထွန်းလာပြီး Cataloging နှင့် Classification စနစ်များ စတင်အသုံးပြုလာခဲ့သည်။</p>
+            </div>
+            <div class="decoration decoration-2">
+                <i class="fas fa-history"></i>
+            </div>
+        </div>
+
+        <div id="ch2" class="page">
+            <div class="page-header">
+                <h1>အခန်း (၂)</h1>
+                <h2>Library 4.0 ဆိုသည်မှာ ဘာလဲ?</h2>
+            </div>
+            <div class="content">
+                <p>Library 4.0 ဆိုသည်မှာ နည်းပညာကို အသုံးပြုရုံသက်သက်မဟုတ်ဘဲ <span class="highlight">"အသိဉာဏ်ရှိသော စာကြည့်တိုက်" (Intelligent Library)</span> အဖြစ် အသွင်ကူးပြောင်းခြင်း ဖြစ်သည်။ ၎င်းသည် Web 4.0 (Symbiotic Web) နှင့်အတူ ပေါ်ပေါက်လာပြီး လူသားနှင့် စက်ပစ္စည်းများအကြား အပြန်အလှန် အကျိုးပြုသည့် ဆက်ဆံရေးကို တည်ဆောက်သည်။</p>
+                
+                <div class="quote">
+                    Library 4.0 သည် စာအုပ်စင်များထက်ပိုသည်။ ၎င်းသည် သိပ္ပံနှင့် နည်းပညာကို အခြေခံသော အသိပညာစနစ်တစ်ခု ဖြစ်သည်။
+                </div>
+                
+                <h3>နည်းပညာဒေါက်တိုင် (၄) သွယ်</h3>
+                <ul>
+                    <li><strong>AI (Artificial Intelligence):</strong> စာကြည့်တိုက်၏ ဦးနှောက်။ အသုံးပြုသူ လိုအပ်ချက်ကို ကြိုတင်ခန့်မှန်းခြင်း၊ စမတ်ရှာဖွေခြင်း။</li>
+                    <li><strong>IoT (Internet of Things):</strong> စက်ပစ္စည်းများနှင့် စာအုပ်များ ချိတ်ဆက်ခြင်း။ အလိုအလျောက် စာအုပ်စီစဉ်ခြင်း။</li>
+                    <li><strong>Big Data & Analytics:</strong> အချက်အလက်များကို ခွဲခြမ်းစိတ်ဖ�ာခြင်း။ အသုံးပြုသူ အတွေ့အကြုံကို ပိုမိုကောင်းမွန်စေခြင်း။</li>
+                    <li><strong>Cloud Computing:</strong> အချိန်မရွေး၊ နေရာမရွေး အချက်အလက်ရယူနိုင်ခြင်း။ ဒီဂျစ်တယ်စာကြည့်တိုက်အား နေရာတိုင်းတွင် ရရှိနိုင်ခြင်း။</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="ch3" class="page">
+            <div class="page-header">
+                <h1>အခန်း (၃)</h1>
+                <h2>နည်းပညာနှင့် စာကြည့်တိုက်ကို အဆင့်မြှင့်တင်ခြင်း</h2>
+            </div>
+            <div class="content">
+                <p>ခေတ်မီစာကြည့်တိုက်တစ်ခု တည်ဆောက်ရန် ဈေးကြီးသော Software များ ဝယ်ယူရန်ထက် ရှိရင်းစွဲ Tools များကို အစွမ်းကုန် အသုံးချနိုင်ရန် လိုအပ်သည်။</p>
+                
+                <h3>၃.၁ Excel VBA: စာကြည့်တိုက်၏ အသက်သွေးကြော</h3>
+                <p>စာရင်းသွင်းခြင်း (Accession)၊ စာအုပ်ငှားရမ်းခြင်း မှတ်တမ်းတင်ခြင်းတို့ကို Excel VBA ဖြင့် အလိုအလျောက် ပြုလုပ်နိုင်သည်။ ရိုးရှင်းသော Macro များဖြင့် နာရီပေါင်းများစွာ အလုပ်ကို မိနစ်ပိုင်းအတွင်း ပြီးမြောက်အောင် ဆောင်ရွက်နိုင်သည်။</p>
+                
+                <h3>၃.၂ Web & Python Technologies</h3>
+                <p>HTML, CSS, JavaScript နှင့် Python (Flask) တို့ကို အသုံးပြု၍ ကိုယ်ပိုင် Database Management System များကို တည်ဆောက်နိုင်သည်။ ဤနည်းဖြင့် စာကြည့်တိုက်ငယ်များအတွက် ကုန်ကျစရိတ် သက်သာစေသည်။</p>
+                
+                <h3>၃.၃ Generative AI</h3>
+                <p>AI ကိုသုံး၍ စက္ကန့်ပိုင်းအတွင်း အချက်အလက် အနှစ်ချုပ် (Abstracting) ပြုလုပ်ခြင်းနှင့် Reference Assistant အဖြစ် အသုံးပြုခြင်း။ ChatGPT, Gemini, Claude ကဲ့သို့သော Tools များကို အသုံးပြု၍ စာကြည့်တိုက်ဝန်ဆောင်မှုများကို အဆင့်မြှင့်တင်နိုင်သည်။</p>
+            </div>
+        </div>
+
+        <div id="ch4" class="page">
+            <div class="page-header">
+                <h1>အခန်း (၄)</h1>
+                <h2>စာကြည့်တိုက်မှူးများ၏ အခန်းကဏ္ဍသစ်</h2>
+            </div>
+            <div class="content">
+                <p>Library 4.0 ခေတ်တွင် စာကြည့်တိုက်မှူးများသည် "Information Curators" နှင့် "Knowledge Engineers" များအဖြစ်သို့ ကူးပြောင်းကြရမည်ဖြစ်သည်။ ရိုးရာစာအုပ်စီစဉ်သူများအဖြစ်မှ ဒီဂျစ်တယ်အသိပညာ ပံ့ပိုးပေးသူများအဖြစ် ပြောင်းလဲရန် လိုအပ်သည်။</p>
+                
+                <div class="quote">
+                    စာကြည့်တိုက်မှူးတစ်ဦး၏ အဓိကတာဝန်မှာ စာအုပ်စင်များကို စီစဉ်ခြင်းမဟုတ်တော့ပါ။ အသိပညာကို ချိတ်ဆက်ပေးခြင်းဖြစ်သည်။
+                </div>
+                
+                <h3>လိုအပ်သော ကျွမ်းကျင်မှု (၅) မျိုး</h3>
+                <ol>
+                    <li><strong>AI Mastery & Prompt Engineering:</strong> AI Tools များကို ကျွမ်းကျင်စွာ အသုံးပြုနိုင်ခြင်း။</li>
+                    <li><strong>Data Literacy (Excel, Python):</strong> အချက်အလက်များကို စီမံခန့်ခွဲနိုင်ခြင်း။</li>
+                    <li><strong>Digital Pedagogy (ဒီဂျစ်တယ်နည်းပြ):</strong> ဒီဂျစ်တယ်နည်းပညာဖြင့် သင်ကြားပို့ချနိုင်ခြင်း။</li>
+                    <li><strong>Continuous Learning (အစဉ်တစိုက် သင်ယူမှု):</strong> နည်းပညာအသစ်များကို မပြတ်သင်ယူနိုင်ခြင်း။</li>
+                    <li><strong>Empathy & Human Connection:</strong> နည်းပညာကြီးစိုးသော ခေတ်တွင် လူသားဆန်သော ဆက်ဆံရေး။</li>
+                </ol>
+            </div>
+        </div>
+
+        <div id="conclusion" class="page">
+            <div class="page-header">
+                <h1>နိဂုံး</h1>
+            </div>
+            <div class="content">
+                <p>မြန်မာ့စာကြည့်တိုက်သမိုင်း၏ အစဦးဖြစ်သော အနော်ရထာမင်းမြတ်၏ ပိဋကတ်တိုက်တော်များမှသည် ကျွန်ုပ်မျှော်မှန်းသော Library 4.0 အထိ ခရီးစဉ်သည် အသိပညာကို တန်ဖိုးထားသော ခရီးစဉ်ပင် ဖြစ်သည်။ နည်းပညာသည် ကိရိယာမျှသာ ဖြစ်သော်လည်း၊ ထိုကိရိယာကို ကိုင်တွယ်သူ စာကြည့်တိုက်မှူးများသည် အနာဂတ်၏ လမ်းပြကြယ်များ ဖြစ်ကြသည်။</p>
+                
+                <div class="quote">
+                    စာအုပ်စင်များကို စီစဉ်ခြင်းသည် အနုပညာတစ်ခုဖြစ်သည်။ သို့သော် အသိပညာကို ချိတ်ဆက်ပေးခြင်းသည် သိပ္ပံပညာဖြစ်သည်။
+                </div>
+                
+                <p>အနာဂတ်သည် အဆင်သင့်ရှိသူများအတွက်သာ ဖြစ်သည်။ ကျွန်ုပ်တို့အားလုံး အတိတ်မှ သင်ခန်းစာကိုယူကာ၊ ပစ္စုပ္ပန်တွင် အကောင်းဆုံး ကြိုးစားလျက်၊ အနာဂတ်၏ စာကြည့်တိုက်လောကကို အတူတကွ တည်ဆောက်ကြပါစို့။</p>
+                
+                <p>စာကြည့်တိုက် ၄.၀ သည် အိပ်မက်မဟုတ်တော့ပါ။ လက်တွေ့ဖြစ်လာနိုင်သော ရည်မှန်းချက်တစ်ခု ဖြစ်သည်။ ဤစာအုပ်ဖြင့် မြန်မာ့စာကြည့်တိုက်များ ခေတ်မီဖွံ့ဖြိုးတိုးတက်ရေးအတွက် အနည်းငယ်မျှ ကူညီနိုင်လိမ့်မည်ဟု မျှော်လင့်ပါသည်။</p>
+            </div>
+        </div>
+
+        <div id="biblio" class="page">
+            <div class="page-header">
+                <h1>ကျမ်းကိုးစာရင်း</h1>
+            </div>
+            <div class="content">
+                <ul>
+                    <li>ဇော်အောင်ထွတ်(စာကြည့်တိုက်ပညာ)။ ၂၀၁၁။ မြန်မာနိုင်ငံပိဋကတ်တိုက်စာကြည့်တိုက်များ။ ရန်ကုန်၊ စာပေဗိမာန်။</li>
+                    <li>လူဖေဝင်း၊ ဦး။ ၁၉၆၆။ မြန်မာပိဋကတ်တိုက်များ၊ ရန်ကုန်၊ စာပေဗိမာန်။</li>
+                    <li>မြန်မာ့စွယ်စုံကျမ်း။ ၁၉၅၄။ ရန်ကုန်၊ စာပေဗိမာန်။</li>
+                    <li>အေးကြူ၊ ဦး။ ၁၉၈၉။ ဗြိတိသျှမြန်မာခေတ် စာကြည့်တိုက်များအခြေအနေ (၁၈၂၆-၁၉၄၇)။</li>
+                    <li>AI Tools: Gemini, ChatGPT, DeepSeek (2025-2026).</li>
+                    <li>International Federation of Library Associations and Institutions (IFLA). (2023). Global Vision Report Summary.</li>
+                    <li>Khan, A. (2022). The Fourth Industrial Revolution and Libraries. Journal of Librarianship, 45(3), 210-225.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="author" class="page">
+            <div class="page-header">
+                <h1>စာရေးသူ၏ ကိုယ်ရေးရာဇဝင်</h1>
+            </div>
+            <div class="content">
+                <p><strong>ဦးဇော်အောင်ထွတ် (ခ) ဇော်အောင်ထွတ် (စာကြည့်တိုက်ပညာ)</strong></p>
+                <p>သိပ္ပံဘွဲ့ (ဓာတုဗေဒ) နှင့် မဟာဝိဇ္ဇာ (စာကြည့်တိုက်နှင့် သုတပညာ) ဘွဲ့များ ရရှိထားပြီး ၂၀၁၅ ခုနှစ်တွင် ဝိဇ္ဇာသိပ္ပံပညာရှင်အဖွဲ့၏ "အကောင်းဆုံး စာတမ်းဆု" ကို ရရှိခဲ့သည်။ စာကြည့်တိုက်ပညာရပ်ဆိုင်ရာ သုတေသနစာတမ်းများစွာကို ရေးသားပြုစုခဲ့ပြီး၊ နည်းပညာနှင့် စာကြည့်တိုက်ပညာကို ပေါင်းစပ်အသုံးချခြင်းအတွက် ထူးချွန်စွာ ဆောင်ရွက်နေသူတစ်ဦး ဖြစ်သည်။</p>
+                
+                <h3>လက်ရှိဖန်တီးထားသော ပရောဂျက်များ</h3>
+                <ul>
+                    <li>Library Catalog Card Generator (Excel VBA based)</li>
+                    <li>၂၀၂၆ မြန်မာ Panchānga + KP Hybrid Calendar</li>
+                    <li>Member Database Management System (Flask & SQLite)</li>
+                    <li>Myanmar Personal Authority Naming System</li>
+                    <li>MARC21 & RDA Digital Content Catalog</li>
+                    <li>KP Horary Astrology System (Python based)</li>
+                    <li>Library 4.0 E-Learning Platform (Prototype)</li>
+                </ul>
+                
+                <h3>ဆက်သွယ်ရန်</h3>
+                <p>Email: zaw.aung.htut.library@example.com</p>
+                <p>Website: www.library4myanmar.com</p>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            <p>စာအုပ်အမည်: <strong>Library 4.0 - မြန်မာ့စာကြည့်တိုက်များ၏ ဒီဂျစ်တယ်အသွင်ကူးပြောင်းရေး</strong></p>
+            <p>စာရေးသူ: <strong>ဇော်အောင်ထွတ် (စာကြည့်တိုက်ပညာ)</strong></p>
+            <div class="book-info">
+                <span>ထုတ်ဝေနှစ်: ဖေဖော်ဝါရီ ၂၀၂၆</span>
+                <span>ISBN: 978-99971-0-123-4</span>
+                <span>စာမျက်နှာ: ၂၅၆</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="toolbar">
+    <div class="toolbar-btn theme" onclick="toggleTheme()" title="Theme">
+        <i class="fas fa-palette"></i>
+    </div>
+    <div class="toolbar-btn print" onclick="window.print()" title="Print">
+        <i class="fas fa-print"></i>
+    </div>
+    <div class="toolbar-btn" onclick="scrollToTop()" title="Top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+</div>
+
+<script>
+    // Show page function
+    function showPage(id) {
+        // Hide all pages
+        const pages = document.querySelectorAll('.page');
+        pages.forEach(p => p.classList.remove('active'));
+        
+        // Show current page
+        document.getElementById(id).classList.add('active');
+        
+        // Update Sidebar Active Class
+        const menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach(item => item.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+
+        // Update progress bar
+        updateProgressBar();
+        
+        // Scroll content to top
+        document.querySelector('.main-content').scrollTop = 0;
+    }
+
+    // Update progress bar based on scroll position
+    function updateProgressBar() {
+        const winScroll = document.querySelector('.main-content').scrollTop;
+        const height = document.querySelector('.main-content').scrollHeight - document.querySelector('.main-content').clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        document.getElementById("progressBar").style.width = scrolled + "%";
+    }
+
+    // Scroll to top function
+    function scrollToTop() {
+        document.querySelector('.main-content').scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+
+    // Toggle theme (light/dark)
+    function toggleTheme() {
+        document.body.classList.toggle('dark-theme');
+        
+        if (document.body.classList.contains('dark-theme')) {
+            document.body.style.backgroundColor = '#1a1a2e';
+            document.querySelector('.main-content').style.backgroundColor = '#16213e';
+            document.querySelector('.main-content').style.color = '#e6e6e6';
+            
+            // Update all text colors in content
+            const contentElements = document.querySelectorAll('.content, .page-header h1, .page-header h2, .page-header h3');
+            contentElements.forEach(el => {
+                el.style.color = '#e6e6e6';
+            });
+        } else {
+            document.body.style.backgroundColor = '#f9fafc';
+            document.querySelector('.main-content').style.backgroundColor = 'white';
+            document.querySelector('.main-content').style.color = '#2d3436';
+            
+            // Reset text colors
+            const contentElements = document.querySelectorAll('.content, .page-header h1, .page-header h2, .page-header h3');
+            contentElements.forEach(el => {
+                el.style.color = '';
+            });
+        }
+    }
+
+    // Initialize progress bar update on scroll
+    document.querySelector('.main-content').addEventListener('scroll', updateProgressBar);
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        const activeItem = document.querySelector('.menu-item.active');
+        const menuItems = document.querySelectorAll('.menu-item');
+        const currentIndex = Array.from(menuItems).indexOf(activeItem);
+        
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            const nextIndex = (currentIndex + 1) % menuItems.length;
+            menuItems[nextIndex].click();
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            const prevIndex = (currentIndex - 1 + menuItems.length) % menuItems.length;
+            menuItems[prevIndex].click();
+        }
+    });
+
+    // Update progress bar on load
+    window.addEventListener('load', updateProgressBar);
+</script>
+
+</body>
+</html>
