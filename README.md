@@ -1,3 +1,4 @@
+![Library 4.0 Cover](cover.jpg)
 # Library 4.0: From Anorhta's Pitaka Taik to Future Intelligent Libraries
 ### By Zaw Aung Htut (Library Science)
 
